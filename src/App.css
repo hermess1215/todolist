@@ -1,0 +1,122 @@
+@font-face {
+  font-family: 'GowunBatang-Regular';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2108@1.1/GowunBatang-Regular.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GangwonEduHyeonokT_OTFMediumA';
+  src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2201-2@1.0/GangwonEduHyeonokT_OTFMediumA.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  font-size: 11px;
+  box-sizing: border-box;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 30px;
+  font-family: 'GowunBatang-Regular';
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.input_box {
+  width: 200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.input_box > .input::placeholder {
+  font-size: 10px;
+}
+
+.input {
+  height: 30px;
+  border: none;
+  border-radius: 5px;
+  padding-left: 10px;
+}
+
+.input:focus {
+  outline: none;
+}
+
+.tab {
+  width: 600px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  height: 50px;
+  align-items: center;
+  position: relative;
+}
+
+.box {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.underline_box {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 15px;
+  height: 2px;
+  width: 100%;
+  background-color: #222;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  opacity: 0;
+  border-radius: 10px;
+}
+
+/* hover 시 애니메이션 */
+.box:hover .underline_box {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+/* 활성 탭은 항상 underline 표시 */
+.box.active .underline_box {
+  transform: scaleX(1);
+  opacity: 1;
+}
+
+.task-list {
+  width: 600px;
+  margin: 0 auto;
+}
+
+.task-item {
+  width: auto;
+  margin-bottom: 30px;
+}
+
+.edit_input {
+  width: 80px;
+}
+
+.flex {
+  height: 30px;
+  display: flex;
+  align-items: center;
+}
+
+.check {
+  margin-left: 10px;
+}
