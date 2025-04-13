@@ -1,87 +1,10 @@
 import { useState } from "react";
-import styled, { createGlobalStyle } from "styled-components";
+import { GlobalStyle } from "./styles/GlobalStyle";
+import { Button } from "./components/Button";
+import { Text } from "./components/Text";
+import { Dropdown } from "./components/Dropdown";
+import { TaskItem, OrderNumber } from "./components/TaskItem";
 import "./App.css";
-
-const GlobalStyle = createGlobalStyle<{ isDark: boolean }>`
-  body {
-    background-color: ${({ isDark }) => (isDark ? "#000" : "#fff")};
-    color: ${({ isDark }) => (isDark ? "#fff" : "#000")};
-    transition: background-color 0.3s, color 0.3s;
-  }
-
-  input {
-    background-color: ${({ isDark }) => (isDark ? "#222" : "#fff")};
-    color: ${({ isDark }) => (isDark ? "#fff" : "#000")};
-    border: 1px solid ${({ isDark }) => (isDark ? "#555" : "#ccc")};
-  }
-
-  .underline_box {
-    background-color: ${({ isDark }) => (isDark ? "#fff" : "#000")};
-    transition: background-color 0.3s;
-  }
-`;
-
-const Button = styled.button<{ isDark?: boolean }>`
-  width: 40px;
-  background-color: ${({ isDark }) => (isDark ? "#fff" : "#222")};
-  color: ${({ isDark }) => (isDark ? "#000" : "#fff")};
-  border-radius: 5px;
-  text-align: center;
-  cursor: pointer;
-  font-size: 12px;
-  margin-left: 5px;
-
-  &.add {
-    line-height: 25px;
-    height: 25px;
-  }
-
-  &.delete {
-    width: 40px;
-  }
-
-  &.save {
-    width: 40px;
-  }
-
-  &.move {
-    width: 30px;
-    padding: 2px;
-  }
-
-  &.theme-toggle {
-    display: flex;
-    justify-self: end;
-    width: auto;
-    padding: 5px 10px;
-    margin-bottom: 10px;
-    font-weight: bold;
-    margin-right: 100px;
-  }
-
-  &.allDelete {
-    width: 70px;
-    height: 30px;
-  }
-`;
-
-const Text = styled.span<{ done: boolean }>`
-  text-decoration: ${(props) => (props.done ? "line-through" : "none")};
-  color: ${(props) => (props.done ? "#aaa" : "inherit")};
-  cursor: pointer;
-  margin-left: 8px;
-`;
-
-const TaskItem = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 5px 0;
-`;
-
-const OrderNumber = styled.span`
-  width: 20px;
-  font-weight: bold;
-`;
 
 function App() {
   const [taskList, setTaskList] = useState<
@@ -93,6 +16,7 @@ function App() {
   const [filter, setFilter] = useState<"all" | "done" | "undone">("all");
   const [isDarkTheme, setIsDarkTheme] = useState(false);
   const [selectMode, setSelectMode] = useState(false);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | "original">("original");
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -154,7 +78,6 @@ function App() {
     if (!selectMode) {
       setSelectMode(true);
     } else {
-      // 선택된 항목 삭제
       setTaskList(taskList.filter((task) => !task.selected));
       setSelectMode(false);
     }
@@ -172,11 +95,21 @@ function App() {
     }
   };
 
-  const filteredTasks = taskList.filter((task) => {
-    if (filter === "done") return task.done;
-    if (filter === "undone") return !task.done;
-    return true;
-  });
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSortOrder(e.target.value as "asc" | "desc" | "original");
+  };
+
+  const filteredTasks = taskList
+    .filter((task) => {
+      if (filter === "done") return task.done;
+      if (filter === "undone") return !task.done;
+      return true;
+    })
+    .sort((a, b) => {
+      if (sortOrder === "asc") return a.text.localeCompare(b.text);
+      if (sortOrder === "desc") return b.text.localeCompare(a.text);
+      return 0;
+    });
 
   const toggleTheme = () => {
     setIsDarkTheme((prev) => !prev);
@@ -211,6 +144,11 @@ function App() {
         >
           전체 삭제
         </Button>
+        <Dropdown isDark={isDarkTheme} onChange={handleSortChange} value={sortOrder}>
+          <option value="original">정렬 없음</option>
+          <option value="asc">가나다순</option>
+          <option value="desc">가나다역순</option>
+        </Dropdown>
       </div>
 
       <div className="input_box">
